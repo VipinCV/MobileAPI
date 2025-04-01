@@ -28,6 +28,27 @@ public class UserController : ControllerBase
         _postgresHelper.InsertUser(user.Name, user.Email);
         return Ok("User added successfully!");
     }
+
+
+[HttpDelete("{userid}")] 
+public IActionResult DeleteUser(int userid)
+{
+    try
+        {
+        bool isDeleted = _postgresHelper.DeleteUser(userid);
+
+        if (!isDeleted)
+        {
+            return NotFound($"❌ User with ID {userid} not found.");
+        }
+
+        return NoContent(); // HTTP 204 (Success, No Content)
+    }
+    catch (Exception ex)
+    {
+        return StatusCode(500, $"❌ Internal Server Error: {ex.Message}");
+    }
+  }
 }
 
 // DTO Class for API request

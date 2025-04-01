@@ -58,6 +58,20 @@ public class PostgresHelper
         return users;
     }
 
+    public bool DeleteUser(int userid)
+    {
+        var users = new List<string>();
+
+        using (var conn = new NpgsqlConnection(_connectionString))
+        {
+            conn.Open();
+            using (var cmd = new NpgsqlCommand("DELETE FROM  Users WHERE userid=" + userid.ToString(), conn))
+            { cmd.ExecuteNonQuery(); }
+        }
+
+        return true;
+    }
+
     public void InsertUser(string name, string email)
     {
         using (var conn = new NpgsqlConnection(_connectionString))
