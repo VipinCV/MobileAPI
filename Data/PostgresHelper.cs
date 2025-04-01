@@ -30,7 +30,7 @@ public class PostgresHelper
                     item.UserId = reader.GetInt32(0).ToString();
                     item.Name = reader.GetString(1);
                     item.Email = reader.GetString(2);
-                  users.Add(item);
+                    users.Add(item);
                 }
             }
         }
@@ -85,8 +85,25 @@ public class PostgresHelper
             }
         }
     }
-}
 
+
+    public bool UpdateUser(int id, string name, string email)
+    {
+        using (var conn = new NpgsqlConnection(_connectionString))
+        {
+            conn.Open();
+            using (var cmd = new NpgsqlCommand("UPDATE  Users set name" + name + ", email=" + email + "where  userid=" + id.ToString(), conn))
+            {
+                //cmd.Parameters.AddWithValue("name", name);
+                //cmd.Parameters.AddWithValue("email", email);
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        return true;
+    }
+}
+  
 
 public class UserData
 {

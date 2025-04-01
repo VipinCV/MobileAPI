@@ -29,8 +29,31 @@ public class UserController : ControllerBase
         return Ok("User added successfully!");
     }
 
+    [HttpPut("{id}")]
+    public IActionResult UpdateUser(int id, [FromBody] UserDto user)
+    {
+        if (user == null || id <= 0)
+        {
+            return BadRequest("❌ Invalid user data.");
+        }
 
-[HttpDelete("{userid}")] 
+        try
+        {
+            bool isUpdated = _postgresHelper.UpdateUser(id, user.Name, user.Email);
+
+            if (!isUpdated)
+            {
+                return NotFound($"❌ User with ID {id} not found.");
+            }
+
+            return Ok($"✅ User with ID {id} updated successfully!");
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"❌ Internal Server Error: {ex.Message}");
+        }
+    }
+    [HttpDelete("{userid}")] 
 public IActionResult DeleteUser(int userid)
 {
     try
@@ -53,7 +76,9 @@ public IActionResult DeleteUser(int userid)
 
 // DTO Class for API request
 public class UserDto
-{
+{ 
     public string Name { get; set; }
     public string Email { get; set; }
 }
+
+ 
