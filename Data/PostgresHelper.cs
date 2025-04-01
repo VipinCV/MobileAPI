@@ -14,19 +14,23 @@ public class PostgresHelper
         _connectionString = configuration.GetConnectionString("PostgresConnection");
     }
 
-    public List<string> GetUsers()
+    public List<UserData> GetUsers()
     {
-        var users = new List<string>();
+        var users = new List<UserData>();
 
         using (var conn = new NpgsqlConnection(_connectionString))
         {
             conn.Open();
-            using (var cmd = new NpgsqlCommand("SELECT name FROM Users;", conn))
+            using (var cmd = new NpgsqlCommand("SELECT userid,name,email FROM Users;", conn))
             using (var reader = cmd.ExecuteReader())
             {
                 while (reader.Read())
                 {
-                    users.Add(reader.GetString(0));
+                    UserData item = new UserData();
+                    item.UserId = reader.GetInt32(0).ToString();
+                    item.Name = reader.GetString(1);
+                    item.Email = reader.GetString(2);
+                  users.Add(item);
                 }
             }
         }
@@ -67,4 +71,12 @@ public class PostgresHelper
             }
         }
     }
+}
+
+
+public class UserData
+{
+    public string UserId { get; set; }
+    public string Name { get; set; }
+    public string Email { get; set; }
 }
