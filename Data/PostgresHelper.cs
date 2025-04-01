@@ -92,7 +92,7 @@ public class PostgresHelper
         using (var conn = new NpgsqlConnection(_connectionString))
         {
             conn.Open();
-            using (var cmd = new NpgsqlCommand("UPDATE  Users set name" + name + ", email=" + email + "where  userid=" + id.ToString(), conn))
+            using (var cmd = new NpgsqlCommand("UPDATE  Users set name=" + name + ", email=" + email + "where  userid=" + id.ToString(), conn))
             {
                 //cmd.Parameters.AddWithValue("name", name);
                 //cmd.Parameters.AddWithValue("email", email);
