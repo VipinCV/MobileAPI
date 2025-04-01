@@ -1,17 +1,24 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using MobileAPI.Helpers; 
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 
-
+builder.Services.AddControllers(); 
 builder.Services.AddEndpointsApiExplorer();
  //builder.Services.AddSwaggerGen();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
 });
+
+//var connectionString = builder.Configuration.GetConnectionString("PostgresConnection");
+//builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
+builder.Services.AddSingleton<PostgresHelper>();
+
 
 
 
@@ -37,7 +44,10 @@ app.UseSwaggerUI(c =>
 
 // Configure the HTTP request pipeline.
 
-app.UseHttpsRedirection();
+app.UseHttpsRedirection(); 
+app.UseAuthorization();
+app.MapControllers();
+app.Run();
 
 var summaries = new[]
 {
@@ -96,6 +106,6 @@ internal record MobileData(DateOnly Date, int TemperatureC, string? Summary)
 class Todo
 {
     public string? Name { get; set; }
-    public string? NameField;
+    public string? NameField { get; set; }
     public bool IsComplete { get; set; }
 }
