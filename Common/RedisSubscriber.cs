@@ -2,17 +2,24 @@
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        var redis = RedisHelper.Connection;
-        var sub = redis.GetSubscriber();
-
-        await sub.SubscribeAsync("my_channel", (channel, message) =>
+        try
         {
-            Console.WriteLine($"Received: {message}");
-        });
+            var redis = RedisHelper.Connection;
+            var sub = redis.GetSubscriber();
 
-        while (!stoppingToken.IsCancellationRequested)
+            await sub.SubscribeAsync("my_channel", (channel, message) =>
+            {
+                Console.WriteLine($"Received: {message}");
+            });
+
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                await Task.Delay(1000, stoppingToken);
+            }
+        }
+        catch (Exception ex)
         {
-            await Task.Delay(1000, stoppingToken);
+            Console.WriteLine($"Received: {ex.Message+ex.Source+ex.InnerException+ex.StackTrace+ex.TargetSite}");
         }
     }
 }
