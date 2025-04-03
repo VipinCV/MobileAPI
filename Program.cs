@@ -20,6 +20,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddSingleton<PostgresHelper>();
 
 
+builder.Services.AddHostedService<RedisSubscriber>();
 
 
 // Add services to the container.
