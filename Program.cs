@@ -44,7 +44,7 @@ app.UseSwaggerUI(c =>
 ////}
 
 // Configure the HTTP request pipeline.
-
+app.MapHub<NotificationHub>("/notificationhub");
 app.UseHttpsRedirection(); 
 app.UseAuthorization();
 app.MapControllers();
