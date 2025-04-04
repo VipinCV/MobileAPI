@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using MobileAPI.Helpers; 
@@ -42,8 +42,20 @@ app.UseSwaggerUI(c =>
 //    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
 //});
 ////}
+///
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins("http://localhost:8056")   
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials(); 
+    });
+});
 
 // Configure the HTTP request pipeline.
+app.UseCors();
 app.MapHub<NotificationHub>("/notificationhub");
 app.UseHttpsRedirection(); 
 app.UseAuthorization();
