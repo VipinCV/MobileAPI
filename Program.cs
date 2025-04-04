@@ -22,6 +22,16 @@ builder.Services.AddSingleton<PostgresHelper>();
 
 builder.Services.AddHostedService<RedisSubscriber>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins("http://localhost:8056") // your frontend URL
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
+});
 
 // Add services to the container.
 
@@ -29,6 +39,7 @@ var app = builder.Build();
 
 //if (app.Environment.IsDevelopment() || app.Environment.IsProduction() )
 //{
+app.UseCors();
 app.UseSwaggerUI();
 
 app.UseSwagger();
@@ -43,19 +54,10 @@ app.UseSwaggerUI(c =>
 //});
 ////}
 ///
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(policy =>
-    {
-        policy.WithOrigins("http://localhost:8056")   
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials(); 
-    });
-});
+ 
 
 // Configure the HTTP request pipeline.
-app.UseCors();
+ 
 app.MapHub<NotificationHub>("/notificationhub");
 app.UseHttpsRedirection(); 
 app.UseAuthorization();
