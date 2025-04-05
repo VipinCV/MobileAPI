@@ -26,7 +26,7 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.WithOrigins("http://localhost:8056") // your frontend URL
+        policy.WithOrigins("https://webproject-jdme.onrender.com") // your frontend URL
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
