@@ -28,8 +28,19 @@ public class PolygonController : ControllerBase
         try
         {
             bool success = _postgresHelper.InsertPolygon(polygonDto.Name, polygonDto.Description, polygonDto.Coordinates);
+
+
+            PolygonDto dto = new PolygonDto
+            {
+                Name = polygonDto.Name,
+                Description = polygonDto.Description,
+                Coordinates = polygonDto.Coordinates
+            };
+
             if (!success) return StatusCode(500, "Failed to insert polygon.");
-            return Ok("✅ Polygon added successfully!");
+
+
+            return Ok(dto);
         }
         catch (Exception ex)
         {
