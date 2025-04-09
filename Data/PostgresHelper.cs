@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 
 namespace MobileAPI.Helpers;
 
@@ -102,6 +103,54 @@ public class PostgresHelper
         }
 
         return true;
+    }
+
+
+    public List<object> GetPolygons()
+    {
+        var list = new List<object>();
+        using var conn = new NpgsqlConnection(_connectionString);
+        conn.Open();
+
+        using var cmd = new NpgsqlCommand("SELECT id, name, description, ST_AsGeoJSON(polygon) AS geojson FROM location_drawings", conn);
+        using var reader = cmd.ExecuteReader();
+        while (reader.Read())
+        {
+            list.Add(new
+            {
+                Id = reader.GetInt32(0),
+                Name = reader.GetString(1),
+                Description = reader.GetString(2),
+                Polygon = JsonConvert.DeserializeObject(reader.GetString(3)) // GeoJSON
+            });
+        }
+        return list;
+    }
+
+    public bool InsertPolygon(string name, string description, List<List<double>> coordinates)
+    {
+        if (coordinates.Count < 4) return false; // Needs at least 4 points to form a closed polygon
+
+        // Ensure it's closed
+        if (!coordinates[0].SequenceEqual(coordinates[^1]))
+        {
+            coordinates.Add(coordinates[0]);
+        }
+
+        // Convert to WKT
+        string polygonWKT = "POLYGON((" +
+            string.Join(",", coordinates.Select(c => $"{c[0]} {c[1]}")) +
+            "))";
+
+        using var conn = new NpgsqlConnection(_connectionString);
+        conn.Open();
+
+        using var cmd = new NpgsqlCommand("INSERT INTO location_drawings (name, description, polygon) VALUES (@name, @desc, ST_GeomFromText(@wkt, 4326))", conn);
+        cmd.Parameters.AddWithValue("name", name);
+        cmd.Parameters.AddWithValue("desc", description);
+        cmd.Parameters.AddWithValue("wkt", polygonWKT);
+
+        return cmd.ExecuteNonQuery() > 0;
     }
 }
   

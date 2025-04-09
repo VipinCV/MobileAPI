@@ -18,8 +18,7 @@ public class RedisSubscriber : BackgroundService
 
             await sub.SubscribeAsync("my_channel", async (channel, message) =>
             {
-                Console.WriteLine($"Received from Redis: {message}");
-
+                Console.WriteLine($"Received from Redis: {message}"); 
                 // Send message to all connected SignalR clients
                 await _hubContext.Clients.All.SendAsync("ReceiveMessage", message.ToString());
             });
