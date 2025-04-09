@@ -121,7 +121,7 @@ public class PostgresHelper
                 Id = reader.GetInt32(0),
                 Name = reader.GetString(1),
                 Description = reader.GetString(2),
-                Polygon = JsonConvert.DeserializeObject(reader.GetString(3)) // GeoJSON
+                Polygon = reader.GetString(3)// GeoJSON
             });
         }
         return list;
