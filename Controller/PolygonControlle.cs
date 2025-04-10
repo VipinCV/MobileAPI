@@ -34,7 +34,8 @@ public class PolygonController : ControllerBase
             {
                 Name = polygonDto.Name,
                 Description = polygonDto.Description,
-                Coordinates = polygonDto.Coordinates
+                Coordinates = polygonDto.Coordinates,
+                Color=polygonDto.Color
             };
 
             if (!success) return StatusCode(500, "Failed to insert polygon.");
@@ -57,4 +58,7 @@ public class PolygonDto
 
     // Format: [[lng, lat], [lng, lat], ...] (must form a closed loop)
     public List<List<double>> Coordinates { get; set; } = new();
+
+     public string Color { get; set; } = string.Empty;
+
 }
