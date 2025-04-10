@@ -112,7 +112,7 @@ public class PostgresHelper
         using var conn = new NpgsqlConnection(_connectionString);
         conn.Open();
 
-        using var cmd = new NpgsqlCommand("SELECT id, name, description, ST_AsGeoJSON(polygon) AS geojson FROM location_drawings", conn);
+        using var cmd = new NpgsqlCommand("SELECT id, name, description, ST_AsGeoJSON(polygon) AS geojson,color FROM location_drawings", conn);
         using var reader = cmd.ExecuteReader();
         while (reader.Read())
         {
@@ -121,7 +121,8 @@ public class PostgresHelper
                 Id = reader.GetInt32(0),
                 Name = reader.GetString(1),
                 Description = reader.GetString(2),
-                Polygon = reader.GetString(3)// GeoJSON
+                Polygon = reader.GetString(3),// GeoJSON
+                Color=reader.GetString(4)
             });
         }
         return list;
