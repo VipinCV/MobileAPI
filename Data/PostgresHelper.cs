@@ -12,7 +12,7 @@ public class PostgresHelper
 
     public PostgresHelper(IConfiguration configuration)
     {
-        _connectionString = configuration.GetConnectionString("PostgresConnection");
+        _connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
     }
 
     public List<UserData> GetUsers()
