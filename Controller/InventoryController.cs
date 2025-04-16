@@ -16,7 +16,7 @@ public class InventoryController : ControllerBase
     [HttpPost("add-product")]
     public async Task<IActionResult> AddProduct(string name, decimal price, int stock)
     {
-        await _db.ExecuteFunctionAsync("SELECT add_product(@name, @price, @stock)", new()
+        await _db.ExecuteFunctionAsync("SELECT inv_add_product(@name, @price, @stock)", new()
         {
             { "name", name },
             { "price", price },
@@ -28,7 +28,7 @@ public class InventoryController : ControllerBase
     [HttpPost("make-purchase")]
     public async Task<IActionResult> MakePurchase(int productId, int qty)
     {
-        await _db.ExecuteFunctionAsync("SELECT make_purchase(@productId, @qty)", new()
+        await _db.ExecuteFunctionAsync("SELECT inv_make_purchase(@productId, @qty)", new()
         {
             { "productId", productId },
             { "qty", qty }
@@ -39,7 +39,7 @@ public class InventoryController : ControllerBase
     [HttpPost("complete-purchase")]
     public async Task<IActionResult> CompletePurchase(int productId, int qty)
     {
-        await _db.ExecuteFunctionAsync("SELECT complete_purchase_transaction(@productId, @qty)", new()
+        await _db.ExecuteFunctionAsync("SELECT inv_complete_purchase_transaction(@productId, @qty)", new()
         {
             { "productId", productId },
             { "qty", qty }
@@ -50,7 +50,7 @@ public class InventoryController : ControllerBase
     [HttpPost("complete-sale")]
     public async Task<IActionResult> CompleteSale(int productId, int qty)
     {
-        await _db.ExecuteFunctionAsync("SELECT complete_sale_transaction(@productId, @qty)", new()
+        await _db.ExecuteFunctionAsync("SELECT inv_complete_sale_transaction(@productId, @qty)", new()
         {
             { "productId", productId },
             { "qty", qty }
@@ -61,7 +61,7 @@ public class InventoryController : ControllerBase
     [HttpGet("sales-summary")]
     public async Task<IActionResult> GetSalesSummary()
     {
-        var result = await _db.ReadAsync("SELECT * FROM get_sales_summary()", reader => new SalesSummaryDto
+        var result = await _db.ReadAsync("SELECT * FROM inv_get_sales_summary()", reader => new SalesSummaryDto
         {
             ProductName = reader.GetString(0),
             TotalSold = reader.GetInt32(1),
@@ -74,7 +74,7 @@ public class InventoryController : ControllerBase
     [HttpGet("stock-status")]
     public async Task<IActionResult> GetStockStatus()
     {
-        var result = await _db.ReadAsync("SELECT * FROM get_stock_status()", reader => new StockStatusDto
+        var result = await _db.ReadAsync("SELECT * FROM inv_get_stock_status()", reader => new StockStatusDto
         {
             ProductName = reader.GetString(0),
             StockQuantity = reader.GetInt32(1)
@@ -86,7 +86,7 @@ public class InventoryController : ControllerBase
     [HttpGet("vw-stock")]
     public async Task<IActionResult> GetStockView()
     {
-        var result = await _db.ReadAsync("SELECT * FROM Stock ORDER BY ProductName", reader => new StockViewDto
+        var result = await _db.ReadAsync("SELECT * FROM vwStock ORDER BY ProductName", reader => new StockViewDto
         {
             ProductId = reader.GetInt32(0),
             ProductName = reader.GetString(1),
