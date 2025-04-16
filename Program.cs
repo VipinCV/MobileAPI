@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using MobileAPI.Data;
 using MobileAPI.Helpers; 
 
 
@@ -18,7 +19,7 @@ builder.Services.AddSwaggerGen(c =>
 //var connectionString = builder.Configuration.GetConnectionString("PostgresConnection");
 //builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
 builder.Services.AddSingleton<PostgresHelper>();
-
+builder.Services.AddSingleton<DbService>();
 
 builder.Services.AddHostedService<RedisSubscriber>();
 
