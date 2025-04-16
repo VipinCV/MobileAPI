@@ -77,7 +77,7 @@ public IActionResult DeleteUser(int userid)
 // DTO Class for API request
 public class UserDto
 { 
-   public   Userid { get; set; }  
+   
     public string Name { get; set; }
     public string Email { get; set; }
 }
