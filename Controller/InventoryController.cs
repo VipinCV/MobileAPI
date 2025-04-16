@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using MobileAPI.Data;
+using Npgsql;
 namespace MobileAPI.Model;
 
 [ApiController]
@@ -23,6 +25,20 @@ public class InventoryController : ControllerBase
             { "stock", stock }
         });
         return Ok("Product added.");
+    }
+
+    [HttpGet("list-products")]
+    public async Task<IActionResult> GetProductList()
+    {
+        var result = await _db.ReadAsync("SELECT * FROM inv_list_products()", reader => new ProductDto
+        {
+            ProductId = reader.GetInt32(0),
+            ProductName = reader.GetString(1),
+            Price = reader.GetDecimal(2),
+            StockQuantity = reader.GetInt32(3)
+        });
+
+        return Ok(result);
     }
 
     [HttpPost("make-purchase")]
