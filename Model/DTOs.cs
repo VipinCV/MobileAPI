@@ -25,6 +25,7 @@
     {
         public int ProductId { get; set; }
         public string ProductName { get; set; }
+         public int Price  { get; set; }
         public int TotalPurchased { get; set; }
         public int TotalSold { get; set; }
         public int CurrentStock { get; set; }
