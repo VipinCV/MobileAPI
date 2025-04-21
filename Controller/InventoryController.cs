@@ -64,12 +64,13 @@ public class InventoryController : ControllerBase
     }
 
     [HttpPost("complete-sale")]
-    public async Task<IActionResult> CompleteSale(int productId, int qty)
+    public async Task<IActionResult> CompleteSale(int productId, int qty,string billno)
     {
-        await _db.ExecuteFunctionAsync("SELECT inv_complete_sale_transaction(@productId, @qty)", new()
+        await _db.ExecuteFunctionAsync("SELECT inv_complete_sale_transaction(@productId, @qty,@billno)", new()
         {
             { "productId", productId },
-            { "qty", qty }
+            { "qty", qty },
+             { "billno", billno }
         });
         return Ok("Sale transaction completed.");
     }
