@@ -106,9 +106,10 @@ public class InventoryController : ControllerBase
         {
             ProductId = reader.GetInt32(0),
             ProductName = reader.GetString(1),
-            TotalPurchased = reader.GetInt32(2),
-            TotalSold = reader.GetInt32(3),
-            CurrentStock = reader.GetInt32(4)
+            Price = reader.GetInt32(2),
+            TotalPurchased = reader.GetInt32(3),
+            TotalSold = reader.GetInt32(4),
+            CurrentStock = reader.GetInt32(5)
         });
 
         return Ok(result);
