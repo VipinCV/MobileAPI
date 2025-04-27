@@ -57,7 +57,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 //var connectionString = builder.Configuration.GetConnectionString("PostgresConnection");
 //builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
 builder.Services.AddSingleton<PostgresHelper>();
-builder.Services.AddSingleton<DbService>();
+builder.Services.AddSingleton<DbService>(); 
+builder.Services.AddSingleton<DbDeepStudyServices>();
 
 builder.Services.AddHostedService<RedisSubscriber>();
 
