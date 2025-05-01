@@ -12,6 +12,11 @@
             _config = config;
         }
 
+        public string DeepDBConnectionStringDeepDB() 
+        {
+            return Environment.GetEnvironmentVariable("DATABASE_URL_DEEPSTUDY");
+        }
+
         public async Task ExecuteFunctionAsync(string sql, Dictionary<string, object> parameters = null)
         {
             await using var conn = new NpgsqlConnection(Environment.GetEnvironmentVariable("DATABASE_URL_DEEPSTUDY"));

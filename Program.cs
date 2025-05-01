@@ -67,7 +67,9 @@ builder.Services.AddCors(options =>
     options.AddDefaultPolicy(policy =>
     {
         policy.WithOrigins("https://webproject-jdme.onrender.com",
-                           "https://vuew.onrender.com" ) // your frontend URL
+                                   "http://localhost:5173",
+                                   "https://vuew.onrender.com" ) // your frontend URL
+
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
